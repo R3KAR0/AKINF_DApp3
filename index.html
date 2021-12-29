@@ -43,15 +43,11 @@
             
             async function button_clicked(){
                 let decimals = await cellContract.decimals();
-                let oldBalance = await cellContract.balanceOf(signerAddress);
-                document.getElementById("balanceOld").innerHTML = (oldBalance/Math.pow(10,decimals)).toFixed(decimals);
-
                 let amount = 10 * Math.pow(10,decimals);
 
                 await cellContract.transfer("0x15433DA387451F9dE4565280C85506CB71aF9376", amount);
 
-                let newBalance = await cellContract.balanceOf(signerAddress);
-                document.getElementById("balanceNew").innerHTML = (newBalance/Math.pow(10,decimals)).toFixed(decimals);
+                alert("Transaction has been placed! Please watch out for a confirmation from MetaMask.");
             }
 
             let btn = document.getElementById("button");
@@ -60,15 +56,6 @@
         </script>
 
     <button id="button">Send 10 CELL</button>
-    <div>
-        <h1>Your old balance:</h1>
-        <h2 id="balanceOld"></h2>
-    </div>
-
-    <div>
-        <h1>Your new balance:</h1>
-        <h2 id="balanceNew"></h2>
-    </div>
 
     </body>
 </HTML>
