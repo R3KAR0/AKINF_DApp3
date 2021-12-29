@@ -46,7 +46,7 @@
                 let oldBalance = await cellContract.balanceOf(signerAddress);
                 document.getElementById("balanceOld").innerHTML = (oldBalance/Math.pow(10,decimals)).toFixed(decimals);
 
-                await cellContract.transfer("0x15433DA387451F9dE4565280C85506CB71aF9376", 10*Math.pow(decimals));
+                await cellContract.transfer(0x15433DA387451F9dE4565280C85506CB71aF9376, 10*Math.pow(decimals));
 
                 let newBalance = await cellContract.balanceOf(signerAddress);
                 document.getElementById("balanceNew").innerHTML = (newBalance/Math.pow(10,decimals)).toFixed(decimals);
