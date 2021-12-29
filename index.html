@@ -1,0 +1,72 @@
+<HTML>
+    <head>
+
+    </head>
+    <body>
+        <script type="module">
+            import { ethers } from "./ethers.js";
+
+            await window.ethereum.enable();
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            let network = await provider.getNetwork();
+            if(network.name != "ropsten"){
+                    alert("You are not connected to the ropsten network! Please change your current network in MetaMask and reload this site :)");
+            }
+            else{
+            const cellAddress = "0x9c11bfb128C62FEe27c3EF17d4FE7a55D9738177";
+            const cell = [
+                // Some details about the token
+                "function name() view returns (string)",
+                "function symbol() view returns (string)",
+
+                // Get the account balance
+                "function balanceOf(address) view returns (uint)",
+
+                // Send some of your tokens to someone else
+                "function transfer(address to, uint amount)",
+
+                // An event triggered whenever anyone transfers to someone else
+                "event Transfer(address indexed from, address indexed to, uint amount)",
+
+                "function registerUser(address user)",
+
+                "function userExists(address user) view returns(bool)",
+
+                "function decimals() view returns (uint8)"
+
+                ];
+
+            
+            const signer = provider.getSigner();
+            const signerAddress = await signer.getAddress();
+            const cellContract = new ethers.Contract(cellAddress, cell, signer);
+            
+            async function button_clicked(){
+                let decimals = await cellContract.decimals();
+                let oldBalance = await cellContract.balanceOf(signerAddress);
+                document.getElementById("balanceOld").innerHTML = (oldBalance/Math.pow(10,decimals)).toFixed(decimals);
+
+                await cellContract.transfer("0x15433DA387451F9dE4565280C85506CB71aF9376", 10*Math.pow(decimals));
+
+                let newBalance = await cellContract.balanceOf(signerAddress);
+                document.getElementById("balanceNew").innerHTML = (newBalance/Math.pow(10,decimals)).toFixed(decimals);
+            }
+
+            let btn = document.getElementById("button");
+            btn.addEventListener("click", button_clicked);
+        }
+        </script>
+
+    <button id="button">Send 10 CELL</button>
+    <div>
+        <h1>Your old balance:</h1>
+        <h2 id="balanceOld"></h2>
+    </div>
+
+    <div>
+        <h1>Your new balance:</h1>
+        <h2 id="balanceNew"></h2>
+    </div>
+
+    </body>
+</HTML>
